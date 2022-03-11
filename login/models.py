@@ -7,7 +7,7 @@ class User(models.Model):
     nickname = models.CharField(max_length=15)
     email = models.CharField(max_length=30)
     # profile = models.URLField()
-    # created_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
     # updated_at = models.DateTimeField()
 
     def __str__(self):
