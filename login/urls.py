@@ -32,6 +32,6 @@ urlpatterns = [
     path('accounts/<int:pk>', views.account),
     path('', views.log_in),
     path('auth', include('rest_framework.urls', namespace='rest_framework')),
-    path('/get_url',views.get, name = 'get'),
-    path('/post_url',views.post, name = 'post'),
+    path('get/',views.get, name = 'get'),
+    path('post/',views.post, name = 'post'),
 ]

@@ -69,51 +69,55 @@
 
 # from msilib.schema import ServiceInstall
 # from os import stat
+
+from http.client import HTTPResponse
 from django.http import HttpResponse, JsonResponse, response
 from django.views.decorators.csrf import csrf_exempt
 from .models import User
 from .serializers import UserSerializer
 from rest_framework.parsers import JSONParser
+from login import serializers
+from django.shortcuts import render 
+from rest_framework.decorators import api_view #api 
+from rest_framework.response import Response #api
 
+from rest_framework import status
+from django.http.response import HttpResponse
+
+@api_view(['POST'])
 @csrf_exempt
 # 계정 전체 조회(get), 회원가입(post)
-def account_list(request) :
-    if request.method == 'GET' :
-        query_set = User.objects.all()
-        serializer = UserSerializer(query_set, many=True)
-        return JsonResponse(serializer.data, safe=False)
-
-    elif request.method == 'POST' :
-        data = JSONParser().parse(request)
-        serializer = UserSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
+def signup(request) :
+    data = JSONParser().parse(request)
+    serializer = UserSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return JsonResponse(serializer.data, status=201)
+    return JsonResponse(serializer.errors, status=400)
 
 
-@csrf_exempt
-#pk로 특정 계정 조회(get), 수정(put), 삭제(delete)
-def account(request, pk):
-    obj = User.objects.get(pk=pk)
+# @csrf_exempt
+# #pk로 특정 계정 조회(get), 수정(put), 삭제(delete)
+# def account(request, pk):
+#     obj = User.objects.get(pk=pk)
 
-    if request.method == 'GET' :
-        serializer = UserSerializer(obj)
-        return JsonResponse(serializer.data, safe = False)
+#     if request.method == 'GET' :
+#         serializer = UserSerializer(obj)
+#         return JsonResponse(serializer.data, safe = False)
 
-    elif request.method == 'PUT' :
-        data = JSONParser().parse(request)
-        serializer = UserSerializer(obj, data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
+#     elif request.method == 'PUT' :
+#         data = JSONParser().parse(request)
+#         serializer = UserSerializer(obj, data=data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return JsonResponse(serializer.data, status=201)
+#         return JsonResponse(serializer.errors, status=400)
 
-    elif request.method == 'DELETE' :
-        obj.delete()
-        return HttpResponse(status=204)
+#     elif request.method == 'DELETE' :
+#         obj.delete()
+#         return HttpResponse(status=204)
 
-
+@api_view(['POST'])
 @csrf_exempt
 def log_in(request):
     if request.method == 'POST' :
@@ -128,14 +132,27 @@ def log_in(request):
             return HttpResponse(status=400)
 
 
-from django.shortcuts import render 
-from rest_framework.decorators import api_view #api 
-from rest_framework.response import Response #api
+# from django.shortcuts import render 
+# from rest_framework.decorators import api_view #api 
+# from rest_framework.response import Response #api
 
-@api_view(['GET'])
-def get(request) :
-    return Response(request)
+# from rest_framework import status
+# from django.http.response import HttpResponse
 
-@api_view(['POST'])
-def post(request) :
-    return response(request)
+# @api_view(['GET'])
+# def get(request) :
+#     users = User.objects.all()
+#     serialized_users=UserSerializer(users, many=True)
+#     return Response(serialized_users.data)
+
+# @api_view(['POST'])
+# def post(request) :
+#     if request.method == 'GET':
+#         return HTTPResponse(status=200)
+#     if request.method == 'POST' :
+#         serializer= UserSerializer(data = request.data, many=True)
+#         if(serializer.is_valid()):
+#             serializer.save()
+#             return Response(serializer.data, status=200)
+#         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+#     return response(request)

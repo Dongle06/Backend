@@ -24,12 +24,12 @@ from rest_framework.permissions import AllowAny
 
 #swagger에서 api 문서로 보고싶은 url정의
 schema_url_patterns = [
-    path('', include('login.urls'))
+    path('api/', include('login.urls')) #밑에 있는 login.urls가는 url과 형식이 동일해야하나??
     ]
 
 schema_view_v1 = get_schema_view(
     openapi.Info(
-        title="Open API",
+        title="Django API",
         default_version = 'v1',
         description = "dongle API 문서",
         terms_of_service = "https://www.google.com/policies/terms/",
@@ -44,7 +44,7 @@ schema_view_v1 = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', include('login.urls')),
+    path('api/', include('login.urls')),
     path(r'swagger(?P<format>\.json|\.yaml)', schema_view_v1.without_ui(cache_timeout=0), name='schema-json'), 
     path(r'swagger', schema_view_v1.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'), 
     path(r'redoc', schema_view_v1.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
