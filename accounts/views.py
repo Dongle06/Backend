@@ -76,7 +76,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import User
 from .serializers import UserSerializer
 from rest_framework.parsers import JSONParser
-from login import serializers
+from accounts import serializers
 from django.shortcuts import render 
 from rest_framework.decorators import api_view #api 
 from rest_framework.response import Response #api

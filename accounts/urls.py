@@ -22,16 +22,16 @@
 # ]
 
 from django.urls import path
-from login import views
+from accounts import views
 from django.conf.urls import include
 
 app_name = 'login'
 
 urlpatterns = [
-    path('accounts/', views.account_list),
-    path('accounts/<int:pk>', views.account),
+    path('signup/', views.signup),
+    # path('accounts/<int:pk>', views.account),
     path('', views.log_in),
     path('auth', include('rest_framework.urls', namespace='rest_framework')),
-    path('get/',views.get, name = 'get'),
-    path('post/',views.post, name = 'post'),
+    # path('get/',views.get, name = 'get'),
+    # path('post/',views.post, name = 'post'),
 ]
