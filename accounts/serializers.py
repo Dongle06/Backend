@@ -14,6 +14,6 @@ class PostSerializer(serializers.ModelSerializer):
         fields = ['user_id', 'password', 'nickname','email','created_at']
     user_id= serializers.CharField(max_length=15)
     password= serializers.CharField(max_length=20)
-    nickname= serializers.CharField(max_length=15)
+    # nickname= serializers.CharField(max_length=15)
     email= serializers.CharField(max_length=30)
-    created_at= serializers.DateTimeField(input_formats=["%Y-%m-%d"])
+    # created_at= serializers.DateTimeField(input_formats=["%Y-%m-%d"])

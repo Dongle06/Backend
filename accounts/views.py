@@ -78,23 +78,33 @@ from .serializers import UserSerializer
 from rest_framework.parsers import JSONParser
 from accounts import serializers
 from django.shortcuts import render 
-from rest_framework.decorators import api_view #api 
+from rest_framework.decorators import api_view, permission_classes #api 
+from rest_framework import permissions
 from rest_framework.response import Response #api
-
+# from rest_framework import response
 from rest_framework import status
 from django.http.response import HttpResponse
 
 @api_view(['POST'])
+@permission_classes((permissions.AllowAny,))
 @csrf_exempt
 # 계정 전체 조회(get), 회원가입(post)
 def signup(request) :
-    data = JSONParser().parse(request)
-    serializer = UserSerializer(data=data)
-    if serializer.is_valid():
-        serializer.save()
-        return JsonResponse(serializer.data, status=201)
-    return JsonResponse(serializer.errors, status=400)
+    if request.method == 'POST' :
+        # data = JSONParser().parse(request)
+        serializer = UserSerializer(data=request.data)
+        if not serializer.is_valid(raise_exception=True):
+            return Response({"message": "Request Body Error."}, status=status.HTTP_409_CONFLICT)
 
+        if User.objects.filter(email=serializer.validated_data['email']).first() is None:
+            serializer.save()
+            # return Response({"message": "ok"}, status=status.HTTP_201_CREATED) #이건 배포할 때
+        # if serializer.is_valid():
+        #     serializer.save()
+            return JsonResponse(serializer.data, status=201) #개발용
+        
+        # return JsonResponse(serializer.errors, status=400)
+        return Response({"message": "duplicate email"}, status=status.HTTP_409_CONFLICT)
 
 # @csrf_exempt
 # #pk로 특정 계정 조회(get), 수정(put), 삭제(delete)

@@ -25,7 +25,7 @@ from django.urls import path
 from accounts import views
 from django.conf.urls import include
 
-app_name = 'login'
+app_name = 'users'
 
 urlpatterns = [
     path('signup/', views.signup),

@@ -14,6 +14,7 @@ from pathlib import Path
 import os, json
 
 from django.core.exceptions import ImproperlyConfigured
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -51,16 +52,24 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #myapp
     'accounts',
+    #django-rest-auth
     'rest_framework',
     'drf_yasg',
+    'rest_framework_simplejwt.token_blacklist',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+
+    #django-allauth
+    'allauth',
+    'allauth.account', #이건 정확히 뭔지 모르겠음
+    'allauth.socialaccount', #얘도
 ]
 
-REST_FRAMEWORK = { # 권한 설정
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
-}
+AUTH_USER_MODEL = 'accounts.User'
+
+SITE_ID = 1 #무슨 사이트 아이디인지 확인필요
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -144,3 +153,54 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+    ),
+}
+
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_REQUIRED = True #구현 다 하면 email과 username이랑 속성바꾸기
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email' #username/user_id로 변경
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+REST_USE_JWT = True
+
+from datetime import timedelta
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=2), #단위 : seconds, hours, minutes, days
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+}
+
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+#     'PAGE_SIZE': 10,
+#     'DEFAULT_PERMISSION_CLASSES': (
+#         'rest_framework.permissions.IsAuthenticated',
+#         'rest_framework.permissions.DjangoModelPermissions',
+#     ),
+#     'DEFAULT_AUTHENTICATION_CLASSES': [ # 권한 설정
+#         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+#         'rest_framework.authentication.SessionAuthentication',
+#         'rest_framework.authentication.BasicAuthentication',
+#     ],
+#     'DEFAULT_RENDERER_CLASSES': [
+#         'rest_framework.renderers.JSONRenderer',
+#     ],
+#     'DEFAULT_PARSER_CLASSES': [
+#         'rest_framework.parsers.JSONParser',
+#         'rest_framework.parsers.FormParser',
+#         'rest_framework.parsers.MultiPartParser'
+#     ]
+# }
