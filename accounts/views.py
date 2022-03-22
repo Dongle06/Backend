@@ -255,7 +255,7 @@ def login(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
         search_username = data['username']
-        obj = Account.objects.get(email=search_username)
+        obj = Account.objects.get(username=search_username)
 
         if data['password'] == obj.password:
             return HttpResponse(status=200)
