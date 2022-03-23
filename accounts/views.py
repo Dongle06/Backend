@@ -132,24 +132,27 @@
 #     else : 
 #         return response({"message" : "not post."})
 
-
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .models import Account
-from .serializers import AccountSerializer
+
+from .models import User
+from .serializers import UserSerializer
 from rest_framework.parsers import JSONParser
-
-
+from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, renderer_classes
+from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
+import jwt, datetime
 @csrf_exempt
 def account_list(request): #password1, password2가 일치하지 않을 때는 프론트단에서 바로 방지함 여기서 구현x
     if request.method == 'GET':
-        query_set = Account.objects.all()
-        serializer = AccountSerializer(query_set, many=True)
+        query_set = User.objects.all()
+        serializer = UserSerializer(query_set, many=True)
         return JsonResponse(serializer.data, safe=False)
 
     elif request.method == 'POST':
         data = JSONParser().parse(request)
-        serializer = AccountSerializer(data=data)
+        serializer = UserSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data, status=201)
@@ -159,15 +162,15 @@ def account_list(request): #password1, password2가 일치하지 않을 때는 �
 @csrf_exempt
 def account(request, pk):
 
-    obj = Account.objects.get(pk=pk)
+    obj = User.objects.get(pk=pk)
 
     if request.method == 'GET':
-        serializer = AccountSerializer(obj)
+        serializer = UserSerializer(obj)
         return JsonResponse(serializer.data, safe=False)
 
     elif request.method == 'PUT':
         data = JSONParser().parse(request)
-        serializer = AccountSerializer(obj, data=data)
+        serializer = UserSerializer(obj, data=data)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data, status=201)
@@ -177,15 +180,42 @@ def account(request, pk):
         obj.delete()
         return HttpResponse(status=204)
 
-
+# @api_view(('POST',))
+# @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
 @csrf_exempt
 def login(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
         search_username = data['username']
-        obj = Account.objects.get(username=search_username)
+        password = data['password']
 
-        if data['password'] == obj.password:
-            return HttpResponse(status=200)
-        else:
-            return HttpResponse(status=400)
+        user = User.objects.filter(username=search_username).first()
+
+        if user is None:
+            raise AuthenticationFailed('User not found!')
+        
+        if not user.check_password(password):
+            raise AuthenticationFailed('Incorrect password!')
+
+        payload= {
+            'id' : user.id,
+            'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
+            'iat' : datetime.datetime.utcnow()
+        }
+
+        token = jwt.encode(payload, 'secret', algorithm = 'HS256').decode('utf-8')
+    
+
+        return JsonResponse({
+            'jwt' : 'token'
+        })
+
+        # data = JSONParser().parse(request)
+        # search_username = data['username']
+        # obj = User.objects.get(username=search_username)
+
+        # if data['password'] == obj.password:
+        #     return HttpResponse(status=200)
+        # else:
+        #     return HttpResponse(status=400)
+

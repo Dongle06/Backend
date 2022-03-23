@@ -1,10 +1,3 @@
-from datetime import timezone
-import email
-import profile
-from pyexpat import model
-from click import password_option
-from django.db import models
-from django.contrib.auth.models import AbstractUser
 # from django.utils.translation import ugettext_lazy as _
 
 
@@ -29,8 +22,24 @@ from django.contrib.auth.models import AbstractUser
 #     def __str__(self):
 #         return self.user_id
 
-class Account(models.Model):
-    username = models.CharField(max_length=40, unique = True)
+from datetime import timezone
+from pyexpat import model
+from click import password_option
+# from django.db import models
+
+# class Account(models.Model):
+#     username = models.CharField(max_length=40, unique = True)
+#     email = models.CharField(max_length=200, unique = True)
+#     password = models.CharField(max_length=200)
+#     created_at = models.DateTimeField(auto_now_add=True)
+
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
+class User(AbstractUser) :
+    username = models.CharField(max_length=255, unique=True)
     email = models.CharField(max_length=200, unique = True)
     password = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    REQUIRED_FIELDS = []

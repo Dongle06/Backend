@@ -69,7 +69,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount', #얘도
 ]
 
-# AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = 'accounts.User'
 
 SITE_ID = 1 #무슨 사이트 아이디인지 확인필요
 
