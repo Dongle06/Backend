@@ -30,7 +30,7 @@ from django.contrib.auth.models import AbstractUser
 #         return self.user_id
 
 class Account(models.Model):
-    username = models.CharField(max_length=40)
-    email = models.CharField(max_length=200)
+    username = models.CharField(max_length=40, unique = True)
+    email = models.CharField(max_length=200, unique = True)
     password = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
