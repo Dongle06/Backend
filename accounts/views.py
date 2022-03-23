@@ -7,12 +7,6 @@
 # # # # from .serializer import UserSerializer
 # # # # from .models import User
 
-# # # # email = request.POST.get("e_mail")
-# # # # name = request.POST.get("name")
-# # # # user_id = request.POST.get("user_id")
-# # # # user_pw = request.POST.get("user_pw")
-# # # # profile_img_src = base_sql_data[0][0]
-
 # # # def signup(request):
 # # #     try:
 # # #         user = User.objects.get(username=request.POST.get("UserId"))
@@ -182,13 +176,6 @@
 #         return response({"message": "password is not indentical."}, status=status.HTTP_409_CONFLICT)
 #     return response({"message": "not post."}, status=status.HTTP_400_BAD_REQUEST)
 
-# def account(request, pk):
-
-#     if request.method == 'GET':
-#         query_set = User.objects.all()
-#         serializer = AccountSerializer(query_set, many=True)
-#         return JsonResponse(serializer.data, safe=False)
-
 
 # @method_decorator(csrf_exempt)
 # # @csrf_exempt
@@ -222,10 +209,31 @@ def account_list(request): #password1, password2가 일치하지 않을 때는 �
     elif request.method == 'POST':
         data = JSONParser().parse(request)
         serializer = AccountSerializer(data=data)
+        # if serializer.data.username
+        # user = Account.objects.get(username=request.POST.get("username"))
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data, status=201)
         return JsonResponse(serializer.errors, status=400)
+
+# # # def signup(request):
+# # #     try:
+# # #         user = User.objects.get(username=request.POST.get("UserId"))
+# # #         messages.error(request, '이미 존재하는 아이디입니다.')
+
+# # #         return redirect('signup')
+# # #     except ObjectDoesNotExist :
+# # #         user2 = User.objects.create_user(email=email, username=user_id, first_name=name, )
+
+# # #     if request.method == 'POST':
+# # #         if request.POST.get('password1') == request.POST.get('password2'):
+# # #             user = User.objects.create_user(
+# # #                 username=request.POST.get('UserId'),
+# # #                 password=request.POST.get('Password1')
+# # #             )
+# # #             auth.login(request, user)
+# # #             return redirect('home')
+# # #     return render(request, 'signup.html')
 
 
 @csrf_exempt
