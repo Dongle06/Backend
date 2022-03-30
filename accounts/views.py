@@ -143,6 +143,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 import jwt, datetime
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import AllowAny
+
 @csrf_exempt
 def account_list(request): #password1, password2가 일치하지 않을 때는 프론트단에서 바로 방지함 여기서 구현x
     if request.method == 'GET':
@@ -180,8 +183,9 @@ def account(request, pk):
         obj.delete()
         return HttpResponse(status=204)
 
-# @api_view(('POST',))
-# @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
+@permission_classes([AllowAny])
+@api_view(('POST',))
+@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
 @csrf_exempt
 def login(request):
     if request.method == 'POST':
@@ -192,10 +196,10 @@ def login(request):
         user = User.objects.filter(username=search_username).first()
 
         if user is None:
-            raise AuthenticationFailed('User not found!')
+            raise AuthenticationFailed('User not found!') #log에만 뜸 json 결과로 안뜸
         
         if not user.check_password(password):
-            raise AuthenticationFailed('Incorrect password!')
+            raise AuthenticationFailed('Incorrect password!') #얘도
 
         payload= {
             'id' : user.id,
@@ -204,11 +208,15 @@ def login(request):
         }
 
         token = jwt.encode(payload, 'secret', algorithm = 'HS256').decode('utf-8')
-    
 
-        return JsonResponse({
+        response = Response()
+
+        response.set_cookie(key ='jwt', value= token, httponly=True) 
+        response.data = {
             'jwt' : 'token'
-        })
+        }
+
+        return response
 
         # data = JSONParser().parse(request)
         # search_username = data['username']
