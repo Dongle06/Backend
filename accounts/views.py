@@ -39,26 +39,6 @@
 # from rest_framework import status
 
 # # @api_view(['POST'])
-# # @permission_classes((permissions.AllowAny,))
-# # @csrf_exempt
-# # def signup(request) :
-# #     if request.method == 'POST' :
-# #         # data = JSONParser().parse(request)
-# #         serializer = UserSerializer(data=request.data)
-# #         if not serializer.is_valid(raise_exception=True):
-# #             return Response({"message": "Request Body Error."}, status=status.HTTP_409_CONFLICT)
-
-# #         if User.objects.filter(email=serializer.validated_data['email']).first() is None:
-# #             serializer.save()
-# #             # return Response({"message": "ok"}, status=status.HTTP_201_CREATED) #이건 배포할 때
-# #         # if serializer.is_valid():
-# #         #     serializer.save()
-# #             return JsonResponse(serializer.data, status=201) #개발용
-        
-# #         # return JsonResponse(serializer.errors, status=400)
-# #         return Response({"message": "duplicate email"}, status=status.HTTP_409_CONFLICT)
-
-# # @api_view(['POST'])
 # # @csrf_exempt
 # # def log_in(request):
 # #     if request.method == 'POST' :
@@ -146,6 +126,7 @@ import jwt, datetime
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
 
+
 @csrf_exempt
 def account_list(request): #password1, password2가 일치하지 않을 때는 프론트단에서 바로 방지함 여기서 구현x
     if request.method == 'GET':
@@ -183,9 +164,9 @@ def account(request, pk):
         obj.delete()
         return HttpResponse(status=204)
 
-@permission_classes([AllowAny])
-@api_view(('POST',))
-@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
+# @permission_classes([AllowAny])
+# @api_view(('POST',))
+# @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
 @csrf_exempt
 def login(request):
     if request.method == 'POST':
@@ -195,28 +176,30 @@ def login(request):
 
         user = User.objects.filter(username=search_username).first()
 
-        if user is None:
-            raise AuthenticationFailed('User not found!') #log에만 뜸 json 결과로 안뜸
+
+        # if user is None:
+        #     raise AuthenticationFailed('User not found!') #log에만 뜸 json 결과로 안뜸
         
-        if not user.check_password(password):
-            raise AuthenticationFailed('Incorrect password!') #얘도
+        # if not user.check_password(password):
+        #     raise AuthenticationFailed('Incorrect password!') #얘도
 
-        payload= {
-            'id' : user.id,
-            'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
-            'iat' : datetime.datetime.utcnow()
-        }
+        # payload= {
+        #     'id' : user.id,
+        #     'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
+        #     'iat' : datetime.datetime.utcnow()
+        # }
 
-        token = jwt.encode(payload, 'secret', algorithm = 'HS256').decode('utf-8')
+        # token = jwt.encode(payload, 'JWT_SECRET', algorithm = 'HS256').decode('utf-8')
 
-        response = Response()
+        # response = Response()
 
-        response.set_cookie(key ='jwt', value= token, httponly=True) 
-        response.data = {
-            'jwt' : 'token'
-        }
+        # response.set_cookie(key ='jwt', value= token, httponly=True) 
+        # response.data = {
+        #     'jwt' : 'token'
+        # }
 
-        return response
+        # return Response()
+        return HttpResponse(status=200)
 
         # data = JSONParser().parse(request)
         # search_username = data['username']
