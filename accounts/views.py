@@ -185,24 +185,24 @@ def login(request):
             raise AuthenticationFailed('Incorrect password!') #얘도
 
         payload= {
-            'id' : user.id,
+            'username' : user.username,
             'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
             'iat' : datetime.datetime.utcnow()
         }
 
         token = jwt.encode(payload, 'JWT_SECRET', algorithm = 'HS256').decode('utf-8')
 
-        response = Response()
+        response = JsonResponse({
+            # 'jwt' : token
+            'message' : 'ok'
+        })
 
         response.set_cookie(key ='jwt', value= token, httponly=True) 
-        response.data = {
-            'jwt' : 'token'
-        }
 
-        # return Response()
-        return JsonResponse({
-            'jwt' : token
-        })
+        return response
+        # return JsonResponse({
+        #     'jwt' : token
+        # })
         # if serializer.is_valid():
         #     return JsonResponse(serializer.data, status=200)
         # return JsonResponse(serializer.errors, status=400)
