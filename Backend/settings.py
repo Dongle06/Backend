@@ -68,6 +68,8 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account', #이건 정확히 뭔지 모르겠음
     'allauth.socialaccount', #얘도
+
+    'corsheaders',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -77,6 +79,7 @@ SITE_ID = 1 #무슨 사이트 아이디인지 확인필요
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheader.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -158,16 +161,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_PERMISSION_CLASSES': (
-#         'rest_framework.permissions.IsAuthenticated',
-#         # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
-#     ),
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'rest_framework.authentication.SessionAuthentication',
-#         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
-#     ),
-# }
 REST_FRAMEWORK = { 
     'DEFAULT_PERMISSION_CLASSES': ( 
         'rest_framework.permissions.IsAuthenticated',
@@ -199,3 +192,5 @@ REST_FRAMEWORK = {
 #     'BLACKLIST_AFTER_ROTATION': True,
 # }
 
+CORS_ORIGIN_ALLOW_ALL = True #앱에 접근하는 모든 프론트 포트를 허용
+CORS_ALLOW_CREDENTIALS = True #프론트에서 쿠키를 받을 수 있도록 함
