@@ -175,31 +175,37 @@ def login(request):
         password = data['password']
 
         user = User.objects.filter(username=search_username).first()
+        # serializer = UserSerializer(data=data)
 
 
-        # if user is None:
-        #     raise AuthenticationFailed('User not found!') #log에만 뜸 json 결과로 안뜸
+        if user is None:
+            raise AuthenticationFailed('User not found!') #log에만 뜸 json 결과로 안뜸
         
-        # if not user.check_password(password):
-        #     raise AuthenticationFailed('Incorrect password!') #얘도
+        if not user.check_password(password):
+            raise AuthenticationFailed('Incorrect password!') #얘도
 
-        # payload= {
-        #     'id' : user.id,
-        #     'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
-        #     'iat' : datetime.datetime.utcnow()
-        # }
+        payload= {
+            'id' : user.id,
+            'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
+            'iat' : datetime.datetime.utcnow()
+        }
 
-        # token = jwt.encode(payload, 'JWT_SECRET', algorithm = 'HS256').decode('utf-8')
+        token = jwt.encode(payload, 'JWT_SECRET', algorithm = 'HS256').decode('utf-8')
 
-        # response = Response()
+        response = Response()
 
-        # response.set_cookie(key ='jwt', value= token, httponly=True) 
-        # response.data = {
-        #     'jwt' : 'token'
-        # }
+        response.set_cookie(key ='jwt', value= token, httponly=True) 
+        response.data = {
+            'jwt' : 'token'
+        }
 
         # return Response()
-        return HttpResponse(status=200)
+        return JsonResponse({
+            'jwt' : token
+        })
+        # if serializer.is_valid():
+        #     return JsonResponse(serializer.data, status=200)
+        # return JsonResponse(serializer.errors, status=400)
 
         # data = JSONParser().parse(request)
         # search_username = data['username']
