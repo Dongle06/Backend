@@ -126,6 +126,8 @@ import jwt, datetime
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
 
+from accounts import serializers
+
 
 @csrf_exempt
 def account_list(request): #password1, password2가 일치하지 않을 때는 프론트단에서 바로 방지함 여기서 구현x
@@ -134,7 +136,9 @@ def account_list(request): #password1, password2가 일치하지 않을 때는 �
         serializer = UserSerializer(query_set, many=True)
         return JsonResponse(serializer.data, safe=False)
 
-    elif request.method == 'POST':
+@csrf_exempt
+def signup(request): #password1, password2가 일치하지 않을 때는 프론트단에서 바로 방지함 여기서 구현x
+    if request.method == 'POST':
         data = JSONParser().parse(request)
         serializer = UserSerializer(data=data)
         if serializer.is_valid():
@@ -160,6 +164,7 @@ def account(request, pk):
             return JsonResponse(serializer.data, status=201)
         return JsonResponse(serializer.errors, status=400)
 
+    #회원 탈퇴
     elif request.method == 'DELETE':
         obj.delete()
         return HttpResponse(status=204)
@@ -193,7 +198,6 @@ def login(request):
         token = jwt.encode(payload, 'JWT_SECRET', algorithm = 'HS256').decode('utf-8')
 
         response = JsonResponse({
-            # 'jwt' : token
             'message' : 'ok'
         })
 
@@ -216,3 +220,34 @@ def login(request):
         # else:
         #     return HttpResponse(status=400)
 
+@csrf_exempt
+def authenticatedUser(request) :
+    if request.method == 'GET' :
+        token = request.COOKIES.get('jwt')
+
+        # if not token:
+        #     raise AuthenticationFailed('Unauthenticated!')
+
+        # try :
+        #     payload = jwt.decode(token, 'JWT_SECRET', algorithm = ['HS256'])
+        
+        # except jwt.ExpiredSignatureError :
+        #     raise AuthenticationFailed('Unauthenticated!')
+        
+        # user = User.objects.filter(id = payload['id']).first()
+        # serializer = UserSerializer(user)
+
+        return JsonResponse({
+            'jwt' : token
+        })
+
+@csrf_exempt
+def logout(request) :
+    if request.method == 'POST' :
+        response = JsonResponse()
+        response.delete_cookie('jwt')
+        response = {
+            'message' : 'success'
+        }
+
+        return response
