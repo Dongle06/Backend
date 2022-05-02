@@ -44,6 +44,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # SECURITY WARNING: keep the secret key used in production secret!
 #SECRET_KEY = get_secret("SECRET_KEY")
 #JWT_SECRET = get_secret("JWT_SECRET")
+JWT_SECRET = env('JWT_SECRET')
 SECRET_KEY = env('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
