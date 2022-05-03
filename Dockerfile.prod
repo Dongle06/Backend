@@ -54,7 +54,7 @@ RUN pip install mysqlclient
 RUN pip install --no-cache /wheels/*
 RUN apk del build-deps
 
-# copy entrypoint-prod.sh
+# copy entrypoint.sh
 COPY ./config/entrypoint.sh $APP_HOME
 
 # copy project
