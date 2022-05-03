@@ -6,14 +6,13 @@ services:
     image: mariadb:latest
     restart: always
     environment:
-      MYSQL_ROOT_HOST: '%'
-      MYSQL_ROOT_PASSWORD: mysql
+      DJANGO_SETTINGS_MODULE: Backend.settings
+    env_file:
+      - .env
     expose:
       - 3306
     ports:
-      - "330:3306"
-    env_file:
-      - .env
+      - "3307:3306"
     volumes:
       - dbdata:/var/lib/mysql
 
