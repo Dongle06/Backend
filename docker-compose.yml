@@ -6,7 +6,8 @@ services:
     image: mariadb:latest
     restart: always
     environment:
-      DJANGO_SETTINGS_MODULE: Backend.settings
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: mysql
     env_file:
       - .env
     expose:
@@ -22,9 +23,9 @@ services:
     command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     environment:
       MYSQL_ROOT_PASSWORD: mysql
-      DATABASE_NAME: database
-      DATABASE_USER: 'user'
-      DATABASE_PASSWORD: zonahdan0604!
+      DATABASE_NAME: mysql
+      DATABASE_USER: 'root'
+      DATABASE_PASSWORD: mysql
       DATABASE_PORT: 3306
       DATABASE_HOST: db
       DJANGO_SETTINGS_MODULE: Backend.settings
