@@ -131,10 +131,6 @@ def authenticatedUser(request) :
 @csrf_exempt
 def logout(request) :
     if request.method == 'POST' :
-        response = JsonResponse()
+        response = HttpResponse('bye')
         response.delete_cookie('jwt')
-        response = {
-            'message' : 'success'
-        }
-
         return response
