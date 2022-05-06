@@ -50,8 +50,8 @@ SECRET_KEY = env('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-#ALLOWED_HOSTS = ["*"]
-ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS')
+ALLOWED_HOSTS = ["*"]
+# ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS')
 
 
 # Application definition
@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #myapp
     'accounts',
+    'storage',
     #django-rest-auth
     'rest_framework',
     'drf_yasg',
@@ -187,7 +188,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = { 
     'DEFAULT_PERMISSION_CLASSES': ( 
-        'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
     ), 
     'DEFAULT_AUTHENTICATION_CLASSES': ( 
         'rest_framework.authentication.TokenAuthentication',
