@@ -49,6 +49,7 @@ urlpatterns = [
     # path('accounts/', include('dj_rest_auth.registration.urls')),
     # path('accounts/', include('allauth.urls')),
     path('api/', include('accounts.urls')), #나중에 accounts로 바꾸든지
+    path('storage/', include('storage.urls')),
     path(r'swagger(?P<format>\.json|\.yaml)', schema_view_v1.without_ui(cache_timeout=0), name='schema-json'), 
     path(r'swagger', schema_view_v1.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'), 
     path(r'redoc', schema_view_v1.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
