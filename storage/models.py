@@ -2,7 +2,7 @@ from django.db import models
 
 class Storage(models.Model) :
     created = models.DateTimeField(auto_now_add=True)
-    userId = models.IntegerField()
+    username = models.CharField(max_length = 255)
     page = models.CharField(max_length=50)
 
     class Meta :

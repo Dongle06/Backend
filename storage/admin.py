@@ -4,6 +4,6 @@ from storage.models import Storage
 
 # Register your models here.
 class StorageAdmin(admin.ModelAdmin) :
-    list_display = ('userId', 'page', 'created',)
+    list_display = ('username', 'page', 'created',)
 
 admin.site.register(Storage, StorageAdmin)
