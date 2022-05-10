@@ -11,6 +11,7 @@
 #     # email= serializers.CharField(max_length=30)
 #     # # created_at= serializers.DateTimeField(input_formats=["%Y-%m-%d"])
 
+from dataclasses import fields
 from rest_framework import serializers
 from .models import User
 
@@ -35,7 +36,13 @@ class AuthSerializer(serializers.ModelSerializer) :
 
     class  Meta:
         model = User
-        fields = ['username', 'email', 'isAuth']
+        fields = ('username', 'email', 'isAuth')
 
     def get_isAuth(self, obj):
         return "True"
+
+class justSerializer(serializers.ModelSerializer) :
+    class Meta:
+        model = User
+        fields = ['id','email']
+        

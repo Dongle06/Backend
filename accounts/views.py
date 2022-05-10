@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import User
-from .serializers import UserSerializer, AuthSerializer
+from .serializers import UserSerializer, AuthSerializer,justSerializer
 from rest_framework.parsers import JSONParser
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
@@ -92,21 +92,7 @@ def login(request):
         response.set_cookie(key ='jwt', value= token, httponly=True) 
 
         return response
-        # return JsonResponse({
-        #     'jwt' : token
-        # })
-        # if serializer.is_valid():
-        #     return JsonResponse(serializer.data, status=200)
-        # return JsonResponse(serializer.errors, status=400)
-
-        # data = JSONParser().parse(request)
-        # search_username = data['username']
-        # obj = User.objects.get(username=search_username)
-
-        # if data['password'] == obj.password:
-        #     return HttpResponse(status=200)
-        # else:
-        #     return HttpResponse(status=400)
+        
 
 from pathlib import Path
 import environ
@@ -130,10 +116,7 @@ def authenticatedUser(request) :
             response = JsonResponse({
                 "isAuth" : "False"
             })
-            return HttpResponse(response, status = status.HTTP_401_UNAUTHORIZED)
-
-        # payload = jwt.decode(token, JWT_SECRET, algorithms= ['HS256'])
-    
+            return HttpResponse(response, status = status.HTTP_401_UNAUTHORIZED)   
 
         try :
             payload = jwt.decode(token, JWT_SECRET, algorithms= ['HS256'])
@@ -147,29 +130,11 @@ def authenticatedUser(request) :
             return HttpResponse(response, status = status.HTTP_401_UNAUTHORIZED)
 
         user = User.objects.filter(username = payload['username']).first()
+
         serializer = serializers.AuthSerializer(user)
 
-        return HttpResponse(serializer, status = status.HTTP_200_OK)
-        # return JsonResponse(payload)
+        return JsonResponse(serializer.data, status = status.HTTP_200_OK)
 
-
-
-
-        # if not token:
-        #     raise AuthenticationFailed('Unauthenticated!')
-
-        # try :
-        #     payload = jwt.decode(token, 'JWT_SECRET', algorithm = ['HS256'])
-        
-        # except jwt.ExpiredSignatureError :
-        #     raise AuthenticationFailed('Unauthenticated!')
-        
-        # user = User.objects.filter(id = payload['id']).first()
-        # serializer = UserSerializer(user)
-
-        # return JsonResponse({
-        #     'jwt' : token
-        # })
 
 @csrf_exempt
 def logout(request) :
