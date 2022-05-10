@@ -29,3 +29,13 @@ class UserSerializer(serializers.ModelSerializer) :
             instance.set_password(password)
         instance.save()
         return instance
+
+class AuthSerializer(serializers.ModelSerializer) :
+    isAuth = serializers.SerializerMethodField()
+
+    class  Meta:
+        model = User
+        fields = ['username', 'email', 'isAuth']
+
+    def get_isAuth(self, obj):
+        return "True"

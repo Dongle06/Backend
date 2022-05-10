@@ -20,7 +20,7 @@ urlpatterns = [
     path('signup', views.signup),
     path('account/<int:pk>', views.account),
     path('login', views.login),
-    path('user', views.authenticatedUser),
+    path('user/auth', views.authenticatedUser),
     path('logout', views.logout),
     path('auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
