@@ -36,3 +36,21 @@ def findUsername(request, username):
     if request.method == 'GET':
         serializer = StorageSerializer(obj, many =True)
         return Response(serializer.data)
+
+
+@api_view(['GET'])
+@csrf_exempt
+def deleteBook(request, id):
+    instance = Storage.objects.filter(id=id)
+    instance.delete()
+
+    # try:
+    #     record = Storage.objects.get(id = id)
+    #     record.delete()
+    #     print("Record deleted successfully!")
+    # except: 
+    #     print("Record doesn't exists")
+
+    return HttpResponse({
+        "message" : "ok"
+    })

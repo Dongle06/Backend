@@ -4,7 +4,7 @@ from .models import Storage
 class StorageSerializer(serializers.ModelSerializer) :
     class Meta:
         model = Storage
-        fields = ('username', 'page', 'created')
+        fields = ('id', 'username', 'page', 'created')
 
     def create(self, validated_data):
         return Storage.objects.create(**validated_data)
