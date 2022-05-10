@@ -41,16 +41,19 @@ def findUsername(request, username):
 @api_view(['GET'])
 @csrf_exempt
 def deleteBook(request, id):
-    instance = Storage.objects.filter(id=id)
-    instance.delete()
+    # instance = Storage.objects.filter(id=id)
+    # instance.delete()
 
-    # try:
-    #     record = Storage.objects.get(id = id)
-    #     record.delete()
-    #     print("Record deleted successfully!")
-    # except: 
-    #     print("Record doesn't exists")
+    try:
+        record = Storage.objects.get(id = id)
+        record.delete()
+        return JsonResponse({"message" : "success"})
+    except: 
+        response = {
+            "message" : "Record doesn't exists"
+        }
+        return JsonResponse(response, status = status.HTTP_400_BAD_REQUEST)
 
-    return HttpResponse({
-        "message" : "ok"
-    })
+    # return HttpResponse({
+    #     "message" : "ok"
+    # })
