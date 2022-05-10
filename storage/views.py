@@ -26,3 +26,12 @@ def storage_list(request, format=None):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['GET'])
+@csrf_exempt
+def findUsername(request, username):
+
+    obj = Storage.objects.get(pk=username)
+
+    if request.method == 'GET':
+        serializer = StorageSerializer(obj)
+        return Response(serializer.data)
