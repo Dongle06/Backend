@@ -1,3 +1,4 @@
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
@@ -30,8 +31,8 @@ def storage_list(request, format=None):
 @csrf_exempt
 def findUsername(request, username):
 
-    obj = Storage.objects.get(pk=username)
+    obj = Storage.objects.all().filter(username=username)
 
     if request.method == 'GET':
-        serializer = StorageSerializer(obj)
+        serializer = StorageSerializer(obj, many =True)
         return Response(serializer.data)
