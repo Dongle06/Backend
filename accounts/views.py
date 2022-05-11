@@ -57,7 +57,7 @@ def account(request, pk):
         obj.delete()
         return HttpResponse(status=204)
 
-# @permission_classes([AllowAny])
+@permission_classes([AllowAny])
 # @api_view(('POST',))
 # @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
 @csrf_exempt
@@ -89,7 +89,7 @@ def login(request):
             'message' : 'ok'
         })
 
-        response.set_cookie(key ='jwt', value= token, httponly=False) 
+        response.set_cookie(key ='jwt', value= token, httponly=False, domain = 'localhost:3001') 
 
         return response
         
