@@ -116,7 +116,8 @@ def authenticatedUser(request) :
             response = JsonResponse({
                 "isAuth" : "False"
             })
-            return HttpResponse(response, status = status.HTTP_401_UNAUTHORIZED)   
+            return response
+            # return HttpResponse(response, status = status.HTTP_401_UNAUTHORIZED)   
 
         try :
             payload = jwt.decode(token, JWT_SECRET, algorithms= ['HS256'])
@@ -127,7 +128,8 @@ def authenticatedUser(request) :
                     "isAuth" : "False"
                 }
             )
-            return HttpResponse(response, status = status.HTTP_401_UNAUTHORIZED)
+            return response
+            # return HttpResponse(response, status = status.HTTP_401_UNAUTHORIZED)
 
         user = User.objects.filter(username = payload['username']).first()
 
