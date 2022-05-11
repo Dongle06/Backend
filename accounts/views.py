@@ -122,6 +122,12 @@ def authenticatedUser(request) :
             return response
             # return HttpResponse(response, status = status.HTTP_401_UNAUTHORIZED)   
 
+        if token == 'undefined':
+            response = JsonResponse({
+                "isAuth" : "false"
+            })
+            return response
+
         try :
             payload = jwt.decode(token, JWT_SECRET, algorithms= ['HS256'])
 
