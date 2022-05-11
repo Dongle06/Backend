@@ -114,7 +114,7 @@ def authenticatedUser(request) :
 
         if not token:
             response = JsonResponse({
-                "isAuth" : "False"
+                "isAuth" : "false"
             })
             return response
             # return HttpResponse(response, status = status.HTTP_401_UNAUTHORIZED)   
@@ -125,7 +125,7 @@ def authenticatedUser(request) :
         except jwt.ExpiredSignatureError :
             response = JsonResponse(
                 {
-                    "isAuth" : "False"
+                    "isAuth" : "false"
                 }
             )
             return response

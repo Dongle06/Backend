@@ -39,7 +39,7 @@ class AuthSerializer(serializers.ModelSerializer) :
         fields = ('username', 'email', 'isAuth')
 
     def get_isAuth(self, obj):
-        return "True"
+        return "true"
 
 class justSerializer(serializers.ModelSerializer) :
     class Meta:
