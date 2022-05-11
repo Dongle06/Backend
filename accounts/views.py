@@ -110,8 +110,10 @@ JWT_SECRET = env('JWT_SECRET')
 
 @csrf_exempt
 def authenticatedUser(request) :
-    if request.method == 'GET' :
-        token = request.COOKIES.get('jwt')
+    if request.method == 'POST' :
+        data = JSONParser().parse(request)
+        token = data['jwt']
+        # token = request.COOKIES.get('jwt')
 
         if not token:
             response = JsonResponse({
