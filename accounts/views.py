@@ -86,7 +86,8 @@ def login(request):
         token = jwt.encode(payload, JWT_SECRET, algorithm = 'HS256').decode('utf-8')
 
         response = JsonResponse({
-            'message' : 'ok'
+            'message' : 'ok',
+            'jwt' : token
         })
 
         response.set_cookie(key ='jwt', value= token, httponly=False, samesite='None') 
