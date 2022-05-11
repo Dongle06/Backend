@@ -89,7 +89,7 @@ def login(request):
             'message' : 'ok'
         })
 
-        response.set_cookie(key ='jwt', value= token, httponly=False, domain = 'http://localhost:3001') 
+        response.set_cookie(key ='jwt', value= token, httponly=False) 
 
         return response
         
