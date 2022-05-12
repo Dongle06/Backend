@@ -32,7 +32,7 @@ def signup(request): #password1, password2가 일치하지 않을 때는 프론�
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
+        return JsonResponse(serializer.errors)
 
 
 @csrf_exempt
