@@ -2,7 +2,7 @@
 
 ## Directory Structure
 
-'''
+```
 ├── README.md                                          - 리드미 파일
 │
 │
@@ -50,7 +50,7 @@
 │   │    ├── tests.py                                  - 테스트
 │   │    ├── urls.py                                   - storage views 함수 url 매핑 
 │   │    └── views.py                                  - 불러오기 기능 함수 구현
-'''
+```
 
 
 ### accounts
